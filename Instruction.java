@@ -5,9 +5,8 @@ abstract class Instruction
   public Instruction(int opcode)
   {
     this.opcode = opcode;
-
   }
 
-  abstract public printBinary();
+  abstract public void printBinary();
 
 }
