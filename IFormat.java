@@ -1,0 +1,4 @@
+class IFormat extends Instruction
+{
+
+}
