@@ -144,7 +144,7 @@ class lab2
 
         if (opcode[2] == 1)
         {
-          if (instParts.length() < 3) // for the jal case
+          if (instParts.length() < 3) // for the jr case
             inst = new RFormat(opcode[0], instParts[0], 0, 0, opcode[1]);
           else
             inst = new RFormat(opcode[0], instParts[0], instParts[1], instParts[2], opcode[1]);
@@ -154,10 +154,9 @@ class lab2
         else if (opcode[2] == 3)
           inst = new JFormat(instParts[0], instParts[1], instParts[2]);
 
-
         inst.printBinary();
 
-        count += 4; // should we use += 4 to make it easier????
+        count ++; // 
       }
     }
     catch(FileNotFoundException e){

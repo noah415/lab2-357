@@ -51,6 +51,7 @@ class RFormat extends Instruction
     printSect(instS);
     instF = ConvertToBinary.decToBin(6, this.funct);
     printSect(instF);
+    System.out.println();
   }
 
 }
