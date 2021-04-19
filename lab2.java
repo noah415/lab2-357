@@ -2,7 +2,7 @@ import java.util.*;
 
 class lab2
 {
-  HashMap<String, int[2]> opcodes = new HashMap<String int[2]>();
+  private HashMap<String, int[2]> opcodes = new HashMap<String int[2]>();
 
   private void initMap()
   {

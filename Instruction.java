@@ -1,6 +1,6 @@
 abstract class Instruction
 {
-  int opcode;
+  public int opcode;
 
   public Instruction(int opcode)
   {
