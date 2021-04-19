@@ -7,7 +7,11 @@ class IFormat extends Instruction{
         super(opcode);
         this.rs = rs;
         this.rt = rt;
-        this.immediate = immediate
+        this.immediate = immediate;
     }
+
+    // TODO: insert logic for calculating the address of label (if needed)
+
+    // TODO: insert logic for printing in binary
 
 }

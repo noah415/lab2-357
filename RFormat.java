@@ -9,14 +9,25 @@ class RFormat extends Instruction
   public int shamt;
   public int funct;
 
-  public RFormat(int opcode, int rs, int rt, int rd, int shamt, int funct)
+  public RFormat(int opcode, int dest, int op1, int op2, int funct)
   {
     super(opcode);
-    this.rs = rs;
-    this.rt = rt;
-    this.rd = rd;
-    this.shamt = shamt;
     this.funct = funct;
+
+    if (opcode == 0 && funct == 0)
+    {
+      this.rs = dest;
+      this.rt = op1;
+      this.rd = 0;
+      this.shamt = op2;
+    }
+    else
+    {
+      this.rs = dest;
+      this.rt = op1;
+      this.rd = op2;
+      this.shamt = 0;
+    }
   }
 
   public void printBinary()
@@ -42,12 +53,4 @@ class RFormat extends Instruction
     printSect(instF);
   }
 
-  private void printSect(int arr[])
-  {
-    for (int bit : arr)
-    {
-      System.out.print(bit);
-    }
-    System.out.println();
-  }
 }
