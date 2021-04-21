@@ -194,15 +194,20 @@ class lab2
           for(int j = 0; j < instParts.size(); j++){
             //System.out.println("part is : " + instParts.get(j));
           }
-          r1 = registers.get(instParts.get(1));
+          //r1 was here
           if(!registers.containsKey(instParts.get(2)))
+          {
             Collections.swap(instParts, 2, 3);
+            Collections.swap(instParts, 1, 2);
+          }
+          r1 = registers.get(instParts.get(1));
           r2 = registers.get(instParts.get(2));
           if(labels.containsKey(instParts.get(3).trim()))
-            immediate = labels.get(instParts.get(3).trim()) - count;
+            immediate = labels.get(instParts.get(3).trim()) - (count + 1);
           else
             immediate = Integer.parseInt(instParts.get(3));
-            IFormat i = new IFormat ((int)icodes.get(opcode)[1], r1, r2, immediate);
+            IFormat i = new IFormat ((int)icodes.get(opcode)[0], r1, r2, immediate);
+            //System.out.println("imm is " + immediate);
             i.printBinary();
         }
         else if(jcodes.containsKey(opcode)){
@@ -211,15 +216,15 @@ class lab2
             addr = labels.get(instParts.get(1).trim());
           else
             addr = Integer.parseInt(instParts.get(1));
-          JFormat j = new JFormat((int)jcodes.get(opcode)[1], addr);
+          JFormat j = new JFormat((int)jcodes.get(opcode)[0], addr);
           j.printBinary();
         }
         else{
-          System.out.println("Invalid opcode: -" + opcode + "-");
+          System.out.println("invalid instruction: " + opcode);
           return;
         }
 
-        count ++; // 
+        count ++; //
       }
     }
     catch(FileNotFoundException e){
