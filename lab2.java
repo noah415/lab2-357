@@ -101,7 +101,7 @@ class lab2
         int len = line.length();
         // check if line is null or empty after trim
         if((!line.trim().isEmpty() && line != null) && line.charAt(0) == '#'){
-          System.out.println("We found a comment!");
+          //System.out.println("We found a comment!");
           continue;
         }
         // if the line has been trimmed and is still not empty:
@@ -110,18 +110,16 @@ class lab2
           if((index = line.indexOf(':')) != -1) {
             // get the substring
             label = line.substring(0, index);
-            System.out.println("Label " + label + " Found! Line " + count + " is: " + line + " Index is: " + index);
+            //System.out.println("Label " + label + " Found! Line " + count + " is: " + line + " Index is: " + index);
             // append to dictionary
             labels.put(label, count);
             // we found a label, check to see if the line is blank (ie just a comment)
             // if so, don't increment count
             if(!validLine(line, index + 1)) {
-              System.out.println("Line continues on next one");
+              //System.out.println("Line continues on next one");
               continue;
             }
           }
-          else
-            System.out.println("Line " + count + " is: " + line);
           // only increment count if it is a valid line (non-comment, non-whitespace)
           count++;
         }
@@ -131,7 +129,7 @@ class lab2
 
       // read lines in file (second pass)
 /* ---------------------------------------------------------------------------*/
-      System.out.println("keys =" + Arrays.asList(labels.keySet()));
+      //System.out.println("keys =" + Arrays.asList(labels.keySet()));
 
       Scanner scannerOne = new Scanner(new File(args[0]));
       count = 0;
@@ -170,9 +168,9 @@ class lab2
         instParts = Arrays.asList(line.split("[:, $()]+")); //splits line by whitespace and commas
         opcode = instParts.get(0);
         opcode = opcode.trim();
-        System.out.println("Opcode is: " + opcode + " count is: " + count);
+        // System.out.println("Opcode is: " + opcode + " count is: " + count);
         if(rcodes.containsKey(opcode)){
-          System.out.println("Opcode is R-format");
+          //System.out.println("Opcode is R-format");
           ln = instParts.size();
           if(ln == 2){
             // jr instruction detected
@@ -192,9 +190,9 @@ class lab2
           r.printBinary();
         }
         else if(icodes.containsKey(opcode)){
-          System.out.println("Opcode is I-format");
+          //System.out.println("Opcode is I-format");
           for(int j = 0; j < instParts.size(); j++){
-            System.out.println("part is : " + instParts.get(j));
+            //System.out.println("part is : " + instParts.get(j));
           }
           r1 = registers.get(instParts.get(1));
           if(!registers.containsKey(instParts.get(2)))
@@ -205,14 +203,16 @@ class lab2
           else
             immediate = Integer.parseInt(instParts.get(3));
             IFormat i = new IFormat ((int)icodes.get(opcode)[1], r1, r2, immediate);
+            i.printBinary();
         }
         else if(jcodes.containsKey(opcode)){
-          System.out.println("Opcode is J-format");
+          //System.out.println("Opcode is J-format");
           if(labels.containsKey(instParts.get(1).trim()))
             addr = labels.get(instParts.get(1).trim());
           else
             addr = Integer.parseInt(instParts.get(1));
           JFormat j = new JFormat((int)jcodes.get(opcode)[1], addr);
+          j.printBinary();
         }
         else{
           System.out.println("Invalid opcode: -" + opcode + "-");
@@ -226,7 +226,6 @@ class lab2
       System.out.println("File not found!");
       return;
     }
-    System.out.println("Function has " + count + " lines!");
   }
 }
 
