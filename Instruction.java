@@ -13,7 +13,7 @@ abstract class Instruction
     {
       System.out.print(bit);
     }
-    System.out.print();
+    System.out.print("\n");
   }
 
   abstract public void printBinary();

@@ -6,30 +6,57 @@ import java.util.*;
 class lab2
 {
   final int initAddress = 0; // this is the address of the first instruction in MIPS
-  static HashMap<String, Integer[]> opcodes = new HashMap<String, Integer[]>();
+  static HashMap<String, Integer[]> rcodes = new HashMap<String, Integer[]>();
+  static HashMap<String, Integer[]> icodes = new HashMap<String, Integer[]>();
+  static HashMap<String, Integer[]> jcodes = new HashMap<String, Integer[]>();
   static HashMap<String, Integer> labels = new HashMap<String, Integer>();
+  static HashMap<String, Integer> registers = new HashMap<String, Integer>();
 
-  private void initMap()
+  static void putValues(char prefix, int start, int end, int offset, HashMap<String, Integer> map){
+    for(int i = start; i <= end; i++)
+      map.put(prefix + String.valueOf(i), i + offset);
+  }
+  private static void initMap()
   {
     // value = array {opcode, funct, FORMATCODE} (decimal)
     //FORMATCODE
     //1 = R
     //2 = I
     //3 = J
-    this.opcodes.put("and", new int[] {0,36,1});
-    this.opcodes.put("or", new int[] {0,37,1});
-    this.opcodes.put("add", new int[] {0,32,1});
-    this.opcodes.put("addi", new int[] {8,0,2});
-    this.opcodes.put("sll", new int[] {0,0,1});
-    this.opcodes.put("sub", new int[] {0,34,1});
-    this.opcodes.put("slt", new int[] {0,42,1});
-    this.opcodes.put("beq", new int[] {4,0,2});
-    this.opcodes.put("bne", new int[] {5,0,2});
-    this.opcodes.put("lw", new int[] {35,0,2});
-    this.opcodes.put("sw", new int[] {43,0,2});
-    this.opcodes.put("j", new int[] {2,0,3});
-    this.opcodes.put("jr", new int[] {0,8,1});
-    this.opcodes.put("jal", new int[] {3,0,3});
+   rcodes.put("and", new Integer[] {0,36,1});
+   rcodes.put("or", new Integer[] {0,37,1});
+   rcodes.put("add", new Integer[] {0,32,1});
+   rcodes.put("sll", new Integer[] {0,0,1});
+   rcodes.put("sub", new Integer[] {0,34,1});
+   rcodes.put("slt", new Integer[] {0,42,1});
+   rcodes.put("jr", new Integer[] {0,8,1});
+
+   icodes.put("addi", new Integer[] {8,0,2});
+   icodes.put("beq", new Integer[] {4,0,2});
+   icodes.put("bne", new Integer[] {5,0,2});
+   icodes.put("lw", new Integer[] {35,0,2});
+   icodes.put("sw", new Integer[] {43,0,2});
+
+   jcodes.put("j", new Integer[] {2,0,3});
+   jcodes.put("jal", new Integer[] {3,0,3});
+
+   registers.put("zero", 0);
+   registers.put("0", 0);
+   registers.put("v0", 2);
+   registers.put("v1", 3);
+   registers.put("a0", 4);
+   registers.put("a1", 5);
+   registers.put("a2", 6);
+   registers.put("a3", 7);
+   registers.put("t0", 8);
+   registers.put("t1", 9);
+   putValues('t', 0, 7, 8, registers);
+   putValues('s', 0, 7, 16, registers);
+   registers.put("t8", 24);
+   registers.put("t9", 25);
+   registers.put("sp", 29);
+   registers.put("ra", 31);
+
   }
 
   private static boolean validLine(String line, int offset){
@@ -53,6 +80,7 @@ class lab2
 
   public static void main(String[] args)
   {
+    initMap();
     // line count
     int count = 0;
     // string to read in
@@ -99,62 +127,96 @@ class lab2
         }
         // process the line
       }
-
+      scanner.close();
 
       // read lines in file (second pass)
 /* ---------------------------------------------------------------------------*/
+      System.out.println("keys =" + Arrays.asList(labels.keySet()));
 
-
-      Scanner scanner = new Scanner(new File(args[0]));
+      Scanner scannerOne = new Scanner(new File(args[0]));
       count = 0;
       int hashIndex;
-      int[] opcode;
+      String opcode;
+      int labelIndex;
       List<String> instParts;
       Instruction inst;
+      int ln;
+      int dest;
+      int r1;
+      int r2;
+      int immediate;
+      int addr;
 
-      while (scanner.hasNextLine()) {
-        hashIndex = line.indexOf('#');
+      while (scannerOne.hasNextLine()) {
 
         // remove all whitespace
-        line = scanner.nextLine().trim();
-
+        line = scannerOne.nextLine().trim();
+        hashIndex = line.indexOf('#');
         if (hashIndex != -1)
           line = line.substring(0, hashIndex);
 
-        if (line.trim().length() == 0) // removes all remaining whitespace and checks the length
+        if (line.length() == 0) // removes all remaining whitespace and checks the length
           continue;
 
         labelIndex = line.indexOf(':');
 
-        if (labelIndex != -1)
-          line = line.substring(labelIndex, line.length());
+        if (labelIndex != -1) {
+          line = line.substring(labelIndex + 1, line.length());
+          line = line.trim();
+        }
 
-        if (line.trim().length() == 0) // removes all remaining whitespace and checks the length
+        if (line.length() == 0) // removes all remaining whitespace and checks the length
           continue;
-
-        instParts = Arrays.asList(line.split("\\s*,\\s*")); //splits line by whitespace and commas
-
-        opcode = opcodes.get(instParts[0]);
-
-        if (opcode == null)
-        {
-          System.out.println("Invalid opcode");
-          exit()
+        instParts = Arrays.asList(line.split("[:, $()]+")); //splits line by whitespace and commas
+        opcode = instParts.get(0);
+        opcode = opcode.trim();
+        System.out.println("Opcode is: " + opcode + " count is: " + count);
+        if(rcodes.containsKey(opcode)){
+          System.out.println("Opcode is R-format");
+          ln = instParts.size();
+          if(ln == 2){
+            // jr instruction detected
+            dest = 0;
+            r1 = registers.get(instParts.get(1));
+            r2 = 0;
+          }
+          else {
+            dest = registers.get(instParts.get(1));
+            r1 = registers.get(instParts.get(2));
+            if (registers.containsKey(instParts.get(3)))
+              r2 = registers.get(instParts.get(3));
+            else
+              r2 = Integer.parseInt(instParts.get(3));
+          }
+          RFormat r = new RFormat((int)rcodes.get(opcode)[1], dest, r1, r2, (int)rcodes.get(opcode)[0]);
         }
-
-        if (opcode[2] == 1)
-        {
-          if (instParts.length() < 3) // for the jr case
-            inst = new RFormat(opcode[0], instParts[0], 0, 0, opcode[1]);
+        else if(icodes.containsKey(opcode)){
+          System.out.println("Opcode is I-format");
+          for(int j = 0; j < instParts.size(); j++){
+            System.out.println("part is : " + instParts.get(j));
+          }
+          r1 = registers.get(instParts.get(1));
+          if(!registers.containsKey(instParts.get(2)))
+            Collections.swap(instParts, 2, 3);
+          r2 = registers.get(instParts.get(2));
+          if(labels.containsKey(instParts.get(3).trim()))
+            immediate = labels.get(instParts.get(3).trim()) - count;
           else
-            inst = new RFormat(opcode[0], instParts[0], instParts[1], instParts[2], opcode[1]);
+            immediate = Integer.parseInt(instParts.get(3));
+            IFormat i = new IFormat ((int)icodes.get(opcode)[1], r1, r2, immediate);
         }
-        else if (opcode[2] == 2)
-          inst = new IFormat(instParts[0], instParts[1], instParts[2]);
-        else if (opcode[2] == 3)
-          inst = new JFormat(instParts[0], instParts[1], instParts[2]);
-
-        inst.printBinary();
+        else if(jcodes.containsKey(opcode)){
+          System.out.println("Opcode is J-format");
+          if(labels.containsKey(instParts.get(1).trim()))
+            addr = labels.get(instParts.get(1).trim());
+          else
+            addr = Integer.parseInt(instParts.get(1));
+          JFormat j = new JFormat((int)jcodes.get(opcode)[1], addr);
+        }
+        else{
+          System.out.println("Invalid opcode: -" + opcode + "-");
+          return;
+        }
 
         count ++; // 
       }
