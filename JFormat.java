@@ -12,7 +12,9 @@ class JFormat extends Instruction
     // TODO: insert logic for printing in binary
     public void printBinary()
     {
-        System.out.println("REEEEEE");
+      String op = Instruction.bTS(opcode, 6);
+      String sadd = Instruction.bTS(address, 26);
+      System.out.println(op + " " + sadd);
     }
 
 }
