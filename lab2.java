@@ -112,7 +112,8 @@ class lab2
             label = line.substring(0, index);
             //System.out.println("Label " + label + " Found! Line " + count + " is: " + line + " Index is: " + index);
             // append to dictionary
-            labels.put(label, count);
+            if(label.indexOf('#') == -1)
+              labels.put(label, count);
             // we found a label, check to see if the line is blank (ie just a comment)
             // if so, don't increment count
             if(!validLine(line, index + 1)) {
