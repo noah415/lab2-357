@@ -13,7 +13,7 @@ class JFormat extends Instruction
     public void printBinary()
     {
       String op = Instruction.bTS(opcode, 6);
-      String sadd = Instruction.bTS(address, 5);
+      String sadd = Instruction.bTS(address, 26);
       System.out.println(op + " " + sadd);
     }
 

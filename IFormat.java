@@ -19,7 +19,7 @@ class IFormat extends Instruction{
       String srs = Instruction.bTS(rs, 5);
       String srt = Instruction.bTS(rt, 5);
       String simm = Instruction.bTS(immediate, 16);
-      System.out.println(op + " " + srs + " " + srt " " + simm);
+      System.out.println(op + " " + srs + " " + srt + " " + simm);
     }
 
 
