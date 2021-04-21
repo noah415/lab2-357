@@ -15,8 +15,12 @@ class IFormat extends Instruction{
     // TODO: insert logic for printing in binary
     public void printBinary()
     {
-        System.out.println("REEEEEE");
+      String op = Instruction.bTS(opcode, 6);
+      String srs = Instruction.bTS(rs, 5);
+      String srt = Instruction.bTS(rt, 5);
+      String simm = Instruction.bTS(immediate, 16);
+      System.out.println(op + " " + srs + " " + srt " " + simm);
     }
-    
+
 
 }
