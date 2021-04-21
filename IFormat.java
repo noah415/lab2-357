@@ -13,5 +13,10 @@ class IFormat extends Instruction{
     // TODO: insert logic for calculating the address of label (if needed)
 
     // TODO: insert logic for printing in binary
+    public void printBinary()
+    {
+        System.out.println("REEEEEE");
+    }
+    
 
 }

@@ -13,9 +13,34 @@ abstract class Instruction
     {
       System.out.print(bit);
     }
-    System.out.print();
+    System.out.print("\n");
   }
 
   abstract public void printBinary();
 
+  public static String binaryToString(int num, int length){
+    String str = "";
+    int counter = 0;
+    boolean isPos = (num >= 0);
+
+    while(num != 0 && counter < length){
+      if((num % 2) == 0)
+        str = "0" + str;
+      else
+        str = "1" + str;
+      num = num >>> 1;
+      counter++;
+    }
+
+    while(counter < length){
+      // if isPos is true, append a zero
+      if(isPos)
+        str = "0" + str;
+      // else append a one
+      else
+        str = "1" + str;
+      counter++;
+    }
+    return str;
+  }
 }
