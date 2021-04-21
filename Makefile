@@ -43,7 +43,7 @@ CLASSES = \
         IFormat.java \
         JFormat.java \
         RFormat.java \
-        Instruction.java \
+        Instruction.java
 
 
 #
