@@ -18,7 +18,7 @@ abstract class Instruction
 
   abstract public void printBinary();
 
-  public static String binaryToString(int num, int length){
+  public static String bTS(int num, int length){
     String str = "";
     int counter = 0;
     boolean isPos = (num >= 0);

@@ -32,7 +32,13 @@ class RFormat extends Instruction
 
   public void printBinary()
   {
-    System.out.println("REEEEEE");
+    String op = Instruction.bTS(opcode, 6);
+    String srs = Instruction.bTS(rs, 5);
+    String srt = Instruction.bTS(rt, 5);
+    String srd = Instruction.bTS(rd, 5);
+    String sshamt = Instruction.bTS(shamt, 5);
+    String sfunct = Instruction.bTS(funct, 6);
+    System.out.println(op + " " + srs + " " + srt + " " + srd + " " + sshamt + " " + sfunct);
   }
 
 }

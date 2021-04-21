@@ -188,7 +188,8 @@ class lab2
             else
               r2 = Integer.parseInt(instParts.get(3));
           }
-          RFormat r = new RFormat((int)rcodes.get(opcode)[1], dest, r1, r2, (int)rcodes.get(opcode)[0]);
+          RFormat r = new RFormat((int)rcodes.get(opcode)[0], dest, r1, r2, (int)rcodes.get(opcode)[1]);
+          r.printBinary();
         }
         else if(icodes.containsKey(opcode)){
           System.out.println("Opcode is I-format");
